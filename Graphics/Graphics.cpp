@@ -62,9 +62,32 @@ bool Graphics::InitializeDirectX(HWND hwnd, int width, int height)
     return true;
 }
 
+bool Graphics::InitializeShaders()
+{
+    if (!vertexShader.Initialize(this->device, L"Shaders\\vertexsshader.cso"))
+        return 0;
+
+    D3D11_INPUT_ELEMENT_DESC layout[] =
+    {
+        {"POSITION", 0u, DXGI_FORMAT_R32G32_FLOAT, 0u, 0u, D3D11_INPUT_CLASSIFICATION::D3D11_INPUT_PER_VERTEX_DATA, 0u}
+    };
+
+    HRESULT hr = this->device->CreateInputLayout(layout, ARRAYSIZE(layout), vertexShader.GetBuffer()->GetBufferPointer(), vertexShader.GetBuffer()->GetBufferSize(), inputLayout.GetAddressOf());
+    if (FAILED(hr))
+    {
+        ErrorLogger::Log(hr, "Failed to create the input layout");
+        return false;
+    }
+
+    return true;
+}
+
 bool Graphics::Initialize(HWND hwnd, int width, int height)
 {
     if (!InitializeDirectX(hwnd, width, height))
+        return false;
+
+    if (!InitializeShaders())
         return false;
 
     return true;

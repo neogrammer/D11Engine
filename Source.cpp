@@ -12,3 +12,10 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance
 	}
 	return 0;
 }
+
+// INPUT ASSEMBLER - complete
+//  input layout - check
+// VERTEX SHADER - complete
+// RASTERIZER
+// PIXEL SHADER
+// OUTPUT MERGER

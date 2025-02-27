@@ -152,6 +152,7 @@
     <ClCompile Include="Mouse\Mouse.cpp" />
     <ClCompile Include="Mouse\MouseEvent.cpp" />
     <ClCompile Include="RenderWindow.cpp" />
+    <ClCompile Include="Graphics\Shaders.cpp" />
     <ClCompile Include="Source.cpp" />
     <ClCompile Include="StringConverter.cpp" />
     <ClCompile Include="WindowContainer.cpp" />
@@ -187,11 +188,16 @@
     <ClInclude Include="Mouse\Mouse.h" />
     <ClInclude Include="Mouse\MouseEvent.h" />
     <ClInclude Include="RenderWindow.h" />
+    <ClInclude Include="Graphics\Shaders.h" />
     <ClInclude Include="StringConverter.h" />
+    <ClInclude Include="Graphics\Vertex.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Inc\SimpleMath.inl" />
     <None Include="WindowContainer.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="Shaders\vertexsshader.hlsl" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

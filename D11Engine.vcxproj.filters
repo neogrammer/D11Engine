@@ -75,6 +75,9 @@
     <ClCompile Include="Graphics\AdapterReader.cpp">
       <Filter>Source Files\Graphics</Filter>
     </ClCompile>
+    <ClCompile Include="Graphics\Shaders.cpp">
+      <Filter>Source Files\Graphics</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Inc\Audio.h">
@@ -170,6 +173,12 @@
     <ClInclude Include="Graphics\AdapterReader.h">
       <Filter>Header Files\Graphics</Filter>
     </ClInclude>
+    <ClInclude Include="Graphics\Vertex.h">
+      <Filter>Header Files\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphics\Shaders.h">
+      <Filter>Header Files\Graphics</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="Inc\SimpleMath.inl">
@@ -178,5 +187,10 @@
     <None Include="WindowContainer.h">
       <Filter>Header Files</Filter>
     </None>
+  </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="Shaders\vertexsshader.hlsl">
+      <Filter>Resource Files</Filter>
+    </FxCompile>
   </ItemGroup>
 </Project>
