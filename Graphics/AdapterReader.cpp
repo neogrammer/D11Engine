@@ -2,22 +2,22 @@
 
 std::vector<AdapterData> AdapterReader::adapters;
 
-std::vector<AdapterData> AdapterReader::getAdapterData()
+std::vector<AdapterData> AdapterReader::GetAdapters()
 {
-	if (adapters.size() > 0)
+	if (adapters.size() > 0) //If already initialized
 		return adapters;
 
 	Microsoft::WRL::ComPtr<IDXGIFactory> pFactory;
 
-	// Create a DXGIFactory object
-	HRESULT hr = CreateDXGIFactory(__uuidof(IDXGIFactory), (reinterpret_cast<void**>(pFactory.GetAddressOf())));
+	// Create a DXGIFactory object.
+	HRESULT hr = CreateDXGIFactory(__uuidof(IDXGIFactory), reinterpret_cast<void**>(pFactory.GetAddressOf()));
 	if (FAILED(hr))
 	{
 		ErrorLogger::Log(hr, "Failed to create DXGIFactory for enumerating adapters.");
 		exit(-1);
 	}
 
-	IDXGIAdapter* pAdapter;
+	IDXGIAdapter * pAdapter;
 	UINT index = 0;
 	while (SUCCEEDED(pFactory->EnumAdapters(index, &pAdapter)))
 	{
@@ -27,7 +27,7 @@ std::vector<AdapterData> AdapterReader::getAdapterData()
 	return adapters;
 }
 
-AdapterData::AdapterData(IDXGIAdapter* pAdapter)
+AdapterData::AdapterData(IDXGIAdapter * pAdapter)
 {
 	this->pAdapter = pAdapter;
 	HRESULT hr = pAdapter->GetDesc(&this->description);

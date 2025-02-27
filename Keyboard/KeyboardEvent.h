@@ -3,18 +3,15 @@
 class KeyboardEvent
 {
 public:
-	enum class EventType : int
+	enum EventType
 	{
 		Press,
 		Release,
 		Invalid
 	};
 
-
 	KeyboardEvent();
 	KeyboardEvent(const EventType type, const unsigned char key);
-	~KeyboardEvent();
-
 	bool IsPress() const;
 	bool IsRelease() const;
 	bool IsValid() const;

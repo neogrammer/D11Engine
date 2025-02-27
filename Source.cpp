@@ -1,21 +1,29 @@
+//Tutorial 15 Solution 2018-09-24
 #include "Engine.h"
 
-int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _In_ LPWSTR lpCmdLine, _In_ int nCmdShow)
+
+int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
+	_In_opt_ HINSTANCE hPrevInstance,
+	_In_ LPWSTR    lpCmdLine,
+	_In_ int       nCmdShow)
 {
 	Engine engine;
-	engine.Initialize(hInstance, "MyWindowClass", "Title",1280, 960);
-
-	while (engine.ProcessMessages() == true)
+	if (engine.Initialize(hInstance, "Title", "MyWindowClass", 800, 600))
 	{
-		engine.Update();
-		engine.RenderFrame();
+		while (engine.ProcessMessages() == true)
+		{
+			engine.Update();
+			engine.RenderFrame();
+		}
 	}
 	return 0;
 }
 
-// INPUT ASSEMBLER - complete
-//  input layout - check
-// VERTEX SHADER - complete
-// RASTERIZER
-// PIXEL SHADER
-// OUTPUT MERGER
+//INPUT ASSEMBLER - COMPLETED
+//VERTEX SHADER - COMPLETED
+//RASTERIZER - COMPLETED
+//PIXEL SHADER - COMPLETED
+//OUTPUT MERGER - COMPLETED
+
+//Create our Vertex Buffer - COMPLETED
+//Draw - COMPLETED

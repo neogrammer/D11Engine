@@ -1,18 +1,16 @@
 #include "KeyboardEvent.h"
 
 KeyboardEvent::KeyboardEvent()
-	: type{KeyboardEvent::EventType::Invalid}
-	, key(0u)
+	:
+	type(EventType::Invalid),
+	key(0u)
 {
 }
 
 KeyboardEvent::KeyboardEvent(const EventType type, const unsigned char key)
-	: type(type)
-	, key(key)
-{
-}
-
-KeyboardEvent::~KeyboardEvent()
+	:
+	type(type),
+	key(key)
 {
 }
 

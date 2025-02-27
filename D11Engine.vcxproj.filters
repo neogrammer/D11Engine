@@ -189,7 +189,10 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <FxCompile Include="Shaders\vertexsshader.hlsl">
+    <FxCompile Include="Shaders\pixelshader.hlsl">
+      <Filter>Resource Files</Filter>
+    </FxCompile>
+    <FxCompile Include="Shaders\vertexshader.hlsl">
       <Filter>Resource Files</Filter>
     </FxCompile>
   </ItemGroup>

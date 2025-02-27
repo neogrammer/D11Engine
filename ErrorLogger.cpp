@@ -20,4 +20,3 @@ void ErrorLogger::Log(HRESULT hr, std::wstring message)
 	std::wstring error_message = L"Error: " + message + L"\n" + error.ErrorMessage();
 	MessageBoxW(NULL, error_message.c_str(), L"Error", MB_ICONERROR);
 }
-
