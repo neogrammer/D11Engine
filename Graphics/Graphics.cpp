@@ -26,16 +26,23 @@ void Graphics::RenderFrame()
 
 	this->deviceContext->RSSetState(this->rasterizerState.Get());
 	deviceContext->OMGetDepthStencilState(depthStencilState.GetAddressOf(), 0);
+	deviceContext->PSSetSamplers(0, 1, this->samplerState.GetAddressOf());
 	this->deviceContext->VSSetShader(vertexshader.GetShader(), NULL, 0);
 	this->deviceContext->PSSetShader(pixelshader.GetShader(), NULL, 0);
 
 	UINT stride = sizeof(Vertex);
 	UINT offset = 0;
+
+	this->deviceContext->PSSetShaderResources(0u, 1u, myTexture.GetAddressOf());
 	this->deviceContext->IASetVertexBuffers(0, 1, vertexBuffer.GetAddressOf(), &stride, &offset);
+	this->deviceContext->IASetIndexBuffer(indexBuffer.Get(), DXGI_FORMAT_R32_UINT, 0);
 
 
-	this->deviceContext->Draw(3, 0);
+	this->deviceContext->DrawIndexed(6, 0, 0);
 
+	spriteBatch->Begin();
+	spriteFont->DrawString(spriteBatch.get(), L"HELLO WORLD", DirectX::XMFLOAT2(0.f,0.f), DirectX::Colors::White, 0.f, DirectX::XMFLOAT2(0.f,0.f), DirectX::XMFLOAT2(1.f, 1.f));
+	spriteBatch->End();
 	this->swapchain->Present(1, NULL);
 }
 
@@ -175,6 +182,27 @@ bool Graphics::InitializeDirectX(HWND hwnd, int width, int height)
 	}
 
 
+	spriteBatch = std::make_unique<DirectX::SpriteBatch>(this->deviceContext.Get());
+	spriteFont = std::make_unique<DirectX::SpriteFont>(this->device.Get(), L"Data\\Fonts\\comicSansMS16.spritefont");
+
+	// create sampler state
+	D3D11_SAMPLER_DESC sampDesc = {};
+	sampDesc.Filter = D3D11_FILTER_MIN_MAG_MIP_LINEAR;
+	sampDesc.AddressU = D3D11_TEXTURE_ADDRESS_WRAP;
+	sampDesc.AddressV = D3D11_TEXTURE_ADDRESS_WRAP;
+	sampDesc.AddressW = D3D11_TEXTURE_ADDRESS_WRAP;
+	sampDesc.ComparisonFunc = D3D11_COMPARISON_NEVER;
+	sampDesc.MinLOD = 0;
+	sampDesc.MaxLOD = D3D11_FLOAT32_MAX;
+	hr = device->CreateSamplerState(&sampDesc, samplerState.GetAddressOf());
+	if (FAILED(hr)) //If error occurred
+	{
+		ErrorLogger::Log(hr, "Failed to create sampler state");
+		return false;
+	}
+
+
+
 	return true;
 }
 
@@ -204,7 +232,7 @@ bool Graphics::InitializeShaders()
 	D3D11_INPUT_ELEMENT_DESC layout[] =
 	{
 		{"POSITION", 0, DXGI_FORMAT::DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D11_INPUT_CLASSIFICATION::D3D11_INPUT_PER_VERTEX_DATA, 0  },
-		{"COLOR", 0, DXGI_FORMAT::DXGI_FORMAT_R32G32B32_FLOAT, 0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_CLASSIFICATION::D3D11_INPUT_PER_VERTEX_DATA, 0  },
+		{"TEXCOORD", 0, DXGI_FORMAT::DXGI_FORMAT_R32G32_FLOAT, 0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_CLASSIFICATION::D3D11_INPUT_PER_VERTEX_DATA, 0  },
 	};
 
 	UINT numElements = ARRAYSIZE(layout);
@@ -221,12 +249,28 @@ bool Graphics::InitializeShaders()
 
 bool Graphics::InitializeScene()
 {
-	Vertex v[] =
-	{
-		Vertex(-0.5f,-0.5f, 0.99f,1.0f,0.0f,0.0f), //Bottom Left Red Point
-		Vertex(0.0f,0.5f,0.99f,0.0f,1.0f,0.0f), //Top Middle Green Point
-		Vertex(0.5f,-0.5f,0.99f,0.0f,0.0f,1.0f), //Bottom Right Blue Point
+	//textured square
+	Vertex v[] = {
+		Vertex(-0.5f,-0.5f, 0.99f, 0.0f, 1.0f), //Bottom Left Point
+		Vertex(-0.5f,0.5f,0.99f, 0.0f, 0.0f), //Top Left Point
+		Vertex(0.5f,0.5f,0.99f, 1.0f, 0.0f), //Top Right Point
+		Vertex(0.5f,-0.5f,0.99f,1.0f,1.0f), //Bottom Right Point
 	};
+
+	DWORD indices[] =
+	{
+		0,1,2,
+		0,2,3
+	};
+
+
+	//textured triangle
+	//Vertex v[] =
+	//{
+	//	Vertex(-0.5f,-0.5f, 0.99f, 0.0f, 1.0f), //Bottom Left Red Point
+	//	Vertex(0.0f,0.5f,0.99f, 0.5f, 0.0f ), //Top Middle Green Point
+	//	Vertex(0.5f,-0.5f,0.99f,1.0f,1.0f), //Bottom Right Blue Point
+	//};
 
 	D3D11_BUFFER_DESC vertexBufferDesc;
 	ZeroMemory(&vertexBufferDesc, sizeof(vertexBufferDesc));
@@ -248,5 +292,31 @@ bool Graphics::InitializeScene()
 		return false;
 	}
 
+	D3D11_BUFFER_DESC indexBufferDesc;
+	ZeroMemory(&indexBufferDesc, sizeof(indexBufferDesc));
+
+	indexBufferDesc.Usage = D3D11_USAGE_DEFAULT;
+	indexBufferDesc.ByteWidth = sizeof(DWORD) * ARRAYSIZE(indices);
+	indexBufferDesc.BindFlags = D3D11_BIND_INDEX_BUFFER;
+	indexBufferDesc.CPUAccessFlags = 0;
+	indexBufferDesc.MiscFlags = 0;
+
+	D3D11_SUBRESOURCE_DATA indexBufferData;
+	ZeroMemory(&indexBufferData, sizeof(indexBufferData));
+	indexBufferData.pSysMem = indices;
+
+	 hr = this->device->CreateBuffer(&indexBufferDesc, &indexBufferData, this->indexBuffer.GetAddressOf());
+	if (FAILED(hr))
+	{
+		ErrorLogger::Log(hr, "Failed to create index buffer.");
+		return false;
+	}
+
+	hr = DirectX::CreateWICTextureFromFile(this->device.Get(), L"Data\\Textures\\tree.png", nullptr, myTexture.GetAddressOf());
+	if (FAILED(hr))
+	{
+		ErrorLogger::Log(hr, "Failed to create wic texture from file.");
+		return false;
+	}
 	return true;
 }

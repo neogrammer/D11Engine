@@ -37,6 +37,9 @@
     <Filter Include="Source Files\Graphics">
       <UniqueIdentifier>{7a6e7153-4524-4cbc-ba80-db7a81f25c0f}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Data">
+      <UniqueIdentifier>{69f474f4-edff-462d-9601-c99b120a02e6}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source.cpp">
