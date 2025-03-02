@@ -38,8 +38,7 @@ void Graphics::RenderFrame()
 
 	// model to world matrix
 	DirectX::XMMATRIX world = DirectX::XMMatrixIdentity();
-	camera.AdjustPosition(0.01f, 0.0f, 0.f);
-	camera.SetLookAtPos(XMFLOAT3(0.f, 0.f, 0.f));
+	
 	constantBuffer.data.mat = world * camera.GetViewMatrix() * camera.GetProjectionMatrix();
 	constantBuffer.data.mat = DirectX::XMMatrixTranspose(constantBuffer.data.mat);
 	if (!constantBuffer.ApplyChanges())

@@ -31,7 +31,7 @@ LRESULT WindowContainer::WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM 
 	case WM_KEYDOWN:
 	{
 		unsigned char keycode = static_cast<unsigned char>(wParam);
-		if (keyboard.IsKeyAutoRepeat())
+		if (keyboard.IsKeysAutoRepeat())
 		{
 			keyboard.OnKeyPressed(keycode);
 		}
@@ -54,7 +54,7 @@ LRESULT WindowContainer::WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM 
 	case WM_CHAR:
 	{
 		unsigned char ch = static_cast<unsigned char>(wParam);
-		if (keyboard.IsCharAutoRepeat())
+		if (keyboard.IsCharsAutoRepeat())
 		{
 			keyboard.OnChar(ch);
 		}

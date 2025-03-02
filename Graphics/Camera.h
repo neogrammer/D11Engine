@@ -25,6 +25,12 @@ public:
 	void AdjustRotation(const XMVECTOR& rot);
 	void AdjustRotation(float x, float y, float z);
 	void SetLookAtPos(XMFLOAT3 lookAtPos);
+
+	const XMVECTOR& GetForwardVector();
+	const XMVECTOR& GetRightVector();
+	const XMVECTOR& GetBackwardVector();
+	const XMVECTOR& GetLeftVector();
+
 private:
 	void UpdateViewMatrix();
 	XMVECTOR posVector;
@@ -36,4 +42,18 @@ private:
 
 	const XMVECTOR DEFAULT_FORWARD_VECTOR = XMVectorSet(0.f, 0.f, 1.f, 0.f);
 	const XMVECTOR DEFAULT_UP_VECTOR = XMVectorSet(0.f, 1.f, 0.f, 0.f);
+	const XMVECTOR DEFAULT_DOWNWARD_VECTOR = XMVectorSet(0.f, -1.f, 0.f, 0.f);
+	const XMVECTOR DEFAULT_BACKWARD_VECTOR = XMVectorSet(0.f, 0.f, -1.f, 0.f);
+	const XMVECTOR DEFAULT_LEFT_VECTOR = XMVectorSet(-1.f, 0.f, 0.f, 0.f);
+	const XMVECTOR DEFAULT_RIGHT_VECTOR = XMVectorSet(1.f, 0.f, 0.f, 0.f);
+
+
+	XMVECTOR vec_forward;
+	XMVECTOR vec_left;
+	XMVECTOR vec_right;
+	XMVECTOR vec_backward;
+
+
+
+
 };
