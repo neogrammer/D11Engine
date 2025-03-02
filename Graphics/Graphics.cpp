@@ -2,7 +2,9 @@
 
 bool Graphics::Initialize(HWND hwnd, int width, int height)
 {
-	if (!InitializeDirectX(hwnd, width, height))
+	windowWidth = width;
+	windowHeight = height;
+	if (!InitializeDirectX(hwnd))
 		return false;
 
 	if (!InitializeShaders())
@@ -30,15 +32,25 @@ void Graphics::RenderFrame()
 	this->deviceContext->VSSetShader(vertexshader.GetShader(), NULL, 0);
 	this->deviceContext->PSSetShader(pixelshader.GetShader(), NULL, 0);
 
-	UINT stride = sizeof(Vertex);
+
 	UINT offset = 0;
 
+
+	// model to world matrix
+	DirectX::XMMATRIX world = DirectX::XMMatrixIdentity();
+	constantBuffer.data.mat = world * camera.GetViewMatrix() * camera.GetProjectionMatrix();
+	constantBuffer.data.mat = DirectX::XMMatrixTranspose(constantBuffer.data.mat);
+	if (!constantBuffer.ApplyChanges())
+	{
+		return;
+	}
+	deviceContext->VSSetConstantBuffers(0, 1, constantBuffer.GetAddressOf());
 	this->deviceContext->PSSetShaderResources(0u, 1u, myTexture.GetAddressOf());
-	this->deviceContext->IASetVertexBuffers(0, 1, vertexBuffer.GetAddressOf(), &stride, &offset);
+	this->deviceContext->IASetVertexBuffers(0, 1, vertexBuffer.GetAddressOf(), vertexBuffer.StridePtr(), &offset);
 	this->deviceContext->IASetIndexBuffer(indexBuffer.Get(), DXGI_FORMAT_R32_UINT, 0);
 
 
-	this->deviceContext->DrawIndexed(6, 0, 0);
+	this->deviceContext->DrawIndexed(indexBuffer.BufferSize(), 0, 0);
 
 	spriteBatch->Begin();
 	spriteFont->DrawString(spriteBatch.get(), L"HELLO WORLD", DirectX::XMFLOAT2(0.f,0.f), DirectX::Colors::White, 0.f, DirectX::XMFLOAT2(0.f,0.f), DirectX::XMFLOAT2(1.f, 1.f));
@@ -46,7 +58,7 @@ void Graphics::RenderFrame()
 	this->swapchain->Present(1, NULL);
 }
 
-bool Graphics::InitializeDirectX(HWND hwnd, int width, int height)
+bool Graphics::InitializeDirectX(HWND hwnd)
 {
 	std::vector<AdapterData> adapters = AdapterReader::GetAdapters();
 
@@ -59,8 +71,8 @@ bool Graphics::InitializeDirectX(HWND hwnd, int width, int height)
 	DXGI_SWAP_CHAIN_DESC scd;
 	ZeroMemory(&scd, sizeof(DXGI_SWAP_CHAIN_DESC));
 
-	scd.BufferDesc.Width = width;
-	scd.BufferDesc.Height = height;
+	scd.BufferDesc.Width = windowWidth;
+	scd.BufferDesc.Height = windowHeight;
 	scd.BufferDesc.RefreshRate.Numerator = 60;
 	scd.BufferDesc.RefreshRate.Denominator = 1;
 	scd.BufferDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
@@ -113,8 +125,8 @@ bool Graphics::InitializeDirectX(HWND hwnd, int width, int height)
 	}
 
 	D3D11_TEXTURE2D_DESC depthStencilDesc;
-	depthStencilDesc.Width = width;
-	depthStencilDesc.Height = height;
+	depthStencilDesc.Width = windowWidth;
+	depthStencilDesc.Height = windowHeight;
 	depthStencilDesc.MipLevels = 1;
 	depthStencilDesc.ArraySize = 1;
 	depthStencilDesc.Format = DXGI_FORMAT_D24_UNORM_S8_UINT;
@@ -161,8 +173,8 @@ bool Graphics::InitializeDirectX(HWND hwnd, int width, int height)
 
 	viewport.TopLeftX = 0;
 	viewport.TopLeftY = 0;
-	viewport.Width = (FLOAT)width;
-	viewport.Height = (FLOAT)height;
+	viewport.Width = (FLOAT)windowWidth;
+	viewport.Height = (FLOAT)windowHeight;
 	viewport.MinDepth = 0.f;
 	viewport.MaxDepth = 1.0f;
 
@@ -251,11 +263,19 @@ bool Graphics::InitializeScene()
 {
 	//textured square
 	Vertex v[] = {
-		Vertex(-0.5f,-0.5f, 0.99f, 0.0f, 1.0f), //Bottom Left Point
-		Vertex(-0.5f,0.5f,0.99f, 0.0f, 0.0f), //Top Left Point
-		Vertex(0.5f,0.5f,0.99f, 1.0f, 0.0f), //Top Right Point
-		Vertex(0.5f,-0.5f,0.99f,1.0f,1.0f), //Bottom Right Point
+		Vertex(-0.5f,-0.5f, 0.f, 0.0f, 1.0f), //Bottom Left Point
+		Vertex(-0.5f,0.5f,0.f, 0.0f, 0.0f), //Top Left Point
+		Vertex(0.5f,0.5f,0.f, 1.0f, 0.0f), //Top Right Point
+		Vertex(0.5f,-0.5f,0.f,1.0f,1.0f), //Bottom Right Point
 	};
+
+	HRESULT hr = this->vertexBuffer.Initialize(device.Get(), v, (UINT)ARRAYSIZE(v));
+	if (FAILED(hr))
+	{
+		ErrorLogger::Log(hr, "Failed to create vertex buffer.");
+		return false;
+	}
+
 
 	DWORD indices[] =
 	{
@@ -264,48 +284,12 @@ bool Graphics::InitializeScene()
 	};
 
 
-	//textured triangle
-	//Vertex v[] =
-	//{
-	//	Vertex(-0.5f,-0.5f, 0.99f, 0.0f, 1.0f), //Bottom Left Red Point
-	//	Vertex(0.0f,0.5f,0.99f, 0.5f, 0.0f ), //Top Middle Green Point
-	//	Vertex(0.5f,-0.5f,0.99f,1.0f,1.0f), //Bottom Right Blue Point
-	//};
+	
 
-	D3D11_BUFFER_DESC vertexBufferDesc;
-	ZeroMemory(&vertexBufferDesc, sizeof(vertexBufferDesc));
+	
+	
 
-	vertexBufferDesc.Usage = D3D11_USAGE_DEFAULT;
-	vertexBufferDesc.ByteWidth = sizeof(Vertex) * ARRAYSIZE(v);
-	vertexBufferDesc.BindFlags = D3D11_BIND_VERTEX_BUFFER;
-	vertexBufferDesc.CPUAccessFlags = 0;
-	vertexBufferDesc.MiscFlags = 0;
-
-	D3D11_SUBRESOURCE_DATA vertexBufferData;
-	ZeroMemory(&vertexBufferData, sizeof(vertexBufferData));
-	vertexBufferData.pSysMem = v;
-
-	HRESULT hr = this->device->CreateBuffer(&vertexBufferDesc, &vertexBufferData, this->vertexBuffer.GetAddressOf());
-	if (FAILED(hr))
-	{
-		ErrorLogger::Log(hr, "Failed to create vertex buffer.");
-		return false;
-	}
-
-	D3D11_BUFFER_DESC indexBufferDesc;
-	ZeroMemory(&indexBufferDesc, sizeof(indexBufferDesc));
-
-	indexBufferDesc.Usage = D3D11_USAGE_DEFAULT;
-	indexBufferDesc.ByteWidth = sizeof(DWORD) * ARRAYSIZE(indices);
-	indexBufferDesc.BindFlags = D3D11_BIND_INDEX_BUFFER;
-	indexBufferDesc.CPUAccessFlags = 0;
-	indexBufferDesc.MiscFlags = 0;
-
-	D3D11_SUBRESOURCE_DATA indexBufferData;
-	ZeroMemory(&indexBufferData, sizeof(indexBufferData));
-	indexBufferData.pSysMem = indices;
-
-	 hr = this->device->CreateBuffer(&indexBufferDesc, &indexBufferData, this->indexBuffer.GetAddressOf());
+	hr = this->indexBuffer.Initialize(device.Get(), indices, (UINT)ARRAYSIZE(indices));
 	if (FAILED(hr))
 	{
 		ErrorLogger::Log(hr, "Failed to create index buffer.");
@@ -318,5 +302,18 @@ bool Graphics::InitializeScene()
 		ErrorLogger::Log(hr, "Failed to create wic texture from file.");
 		return false;
 	}
+
+	
+
+	hr = constantBuffer.Initialize(device.Get(), deviceContext.Get());
+	if (FAILED(hr))
+	{
+		ErrorLogger::Log(hr, "Failed to initialize constant buffer.");
+		return false;
+	}
+
+	camera.SetPosition(0.f, 0.f, -2.f);
+	camera.SetProjectionValues(90.f, (float)windowWidth / (float)windowHeight, 0.1f, 1000.f);
+
 	return true;
 }
