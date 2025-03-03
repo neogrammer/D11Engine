@@ -65,6 +65,8 @@ StyleCopReport.xml
 # Files built by Visual Studio
 *.pdb
 *.lib
+*.zip
+*.7z
 *_i.c
 *_p.c
 *_h.h
