@@ -280,6 +280,8 @@
     <None Include="WindowContainer.h">
       <Filter>Header Files</Filter>
     </None>
+    <None Include="Libs.7z" />
+    <None Include="Libs.zip" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Shaders\pixelshader.hlsl">

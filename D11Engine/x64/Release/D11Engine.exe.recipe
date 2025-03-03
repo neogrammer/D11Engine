@@ -12,6 +12,12 @@
     <ContentFile>
       <FullPath>C:\Users\AUStudent\Desktop\ProgrammingProjects\NewD11Engine\D11Engine\Shaders\Bytecode\vertexshader.cso</FullPath>
     </ContentFile>
+    <ContentFile>
+      <FullPath>C:\Users\AUStudent\Desktop\ProgrammingProjects\NewD11Engine\D11Engine\Libs.7z</FullPath>
+    </ContentFile>
+    <ContentFile>
+      <FullPath>C:\Users\AUStudent\Desktop\ProgrammingProjects\NewD11Engine\D11Engine\Libs.zip</FullPath>
+    </ContentFile>
   </ContentFiles>
   <SatelliteDlls />
   <NonRecipeFileRefs />

@@ -224,6 +224,12 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Inc\SimpleMath.inl" />
+    <None Include="Libs.7z">
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</DeploymentContent>
+    </None>
+    <None Include="Libs.zip">
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</DeploymentContent>
+    </None>
     <None Include="WindowContainer.h" />
   </ItemGroup>
   <ItemGroup>
