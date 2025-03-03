@@ -11,7 +11,7 @@ bool Engine::Initialize(HINSTANCE hInstance, std::string window_title, std::stri
 		return false;
 
 	return true;
-	//small change
+	
 }
 
 bool Engine::ProcessMessages()
