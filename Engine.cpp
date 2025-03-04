@@ -10,6 +10,10 @@ bool Engine::Initialize(HINSTANCE hInstance, std::string window_title, std::stri
 	if (!gfx.Initialize(this->render_window.GetHWND(), width, height))
 		return false;
 
+	//gfx.model.AdjustRotation(58.1f, DirectX::XM_PI, 0.f);
+	//gfx.model.AdjustPosition(0.f, -1.2f, -2.f);
+
+
 	return true;
 	
 }
@@ -72,8 +76,6 @@ void Engine::Update()
 	{
 		this->gfx.camera.AdjustPosition(0.f, -cameraSpeed * dt, 0.f);
 	}
-
-
 
 }
 

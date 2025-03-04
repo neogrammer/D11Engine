@@ -57,6 +57,13 @@ void Camera::SetPosition(const XMVECTOR& pos)
 	UpdateViewMatrix();
 }
 
+void Camera::SetPosition(const XMFLOAT3& pos)
+{
+	this->pos = pos;
+	this->posVector = XMLoadFloat3(&this->pos);
+	UpdateViewMatrix();
+}
+
 void Camera::SetPosition(float x, float y, float z)
 {
 	this->pos = XMFLOAT3(x, y, z);
@@ -69,6 +76,15 @@ void Camera::AdjustPosition(const XMVECTOR& pos)
 	this->posVector += pos;
 	XMStoreFloat3(&this->pos, this->posVector);
 	UpdateViewMatrix();
+}
+
+void Camera::AdjustPosition(const XMFLOAT3& pos)
+{
+	this->pos.x = pos.x;
+	this->pos.y = pos.y;
+	this->pos.z = pos.z;
+	this->posVector = XMLoadFloat3(&this->pos);
+	this->UpdateViewMatrix();
 }
 
 void Camera::AdjustPosition(float x, float y, float z)
@@ -87,6 +103,13 @@ void Camera::SetRotation(const XMVECTOR& rot)
 	UpdateViewMatrix();
 }
 
+void Camera::SetRotation(const XMFLOAT3& rot)
+{
+	this->rot = rot;
+	this->rotVector = XMLoadFloat3(&this->rot);
+	this->UpdateViewMatrix();
+}
+
 void Camera::SetRotation(float x, float y, float z)
 {
 	this->rot = XMFLOAT3(x, y, z);
@@ -98,6 +121,15 @@ void Camera::AdjustRotation(const XMVECTOR& rot)
 {
 	this->rotVector += rot;
 	XMStoreFloat3(&this->rot, this->rotVector);
+	this->UpdateViewMatrix();
+}
+
+void Camera::AdjustRotation(const XMFLOAT3& rot)
+{
+	this->rot.x += rot.x;
+	this->rot.y += rot.y;
+	this->rot.z += rot.z;
+	this->rotVector = XMLoadFloat3(&this->rot);
 	this->UpdateViewMatrix();
 }
 
@@ -122,14 +154,14 @@ void Camera::SetLookAtPos(XMFLOAT3 lookAtPos)
 	float pitch = 0.f;
 	if (lookAtPos.y != 0.f)
 	{
-		const float distance = sqrt(lookAtPos.x * lookAtPos.x + lookAtPos.z * lookAtPos.z);
-		pitch = atan(lookAtPos.y / distance);
+		const float distance = sqrtf(lookAtPos.x * lookAtPos.x + lookAtPos.z * lookAtPos.z);
+		pitch = atanf(lookAtPos.y / distance);
 	}
 
 	float yaw = 0.f;
 	if (lookAtPos.x != 0.f)
 	{
-		yaw = atan(lookAtPos.x / lookAtPos.z);
+		yaw = atanf(lookAtPos.x / lookAtPos.z);
 	}
 	if (lookAtPos.z > 0)
 	{

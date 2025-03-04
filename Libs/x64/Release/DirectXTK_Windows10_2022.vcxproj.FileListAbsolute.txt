@@ -1,0 +1,17 @@
+C:\sdks\DirectXTK-main\Bin\Windows10_2022\x64\Release\DirectXTK.lib
+C:\sdks\DirectXTK-main\Bin\Windows10_2022\x64\Release\priconfig.xml
+C:\sdks\DirectXTK-main\Bin\Windows10_2022\x64\Release\priconfig.xml.intermediate
+C:\sdks\DirectXTK-main\Bin\Windows10_2022\x64\Release\unfiltered.layout.resfiles
+C:\sdks\DirectXTK-main\Bin\Windows10_2022\x64\Release\unfiltered.layout.resfiles.intermediate
+C:\sdks\DirectXTK-main\Bin\Windows10_2022\x64\Release\filtered.layout.resfiles
+C:\sdks\DirectXTK-main\Bin\Windows10_2022\x64\Release\filtered.layout.resfiles.intermediate
+C:\sdks\DirectXTK-main\Bin\Windows10_2022\x64\Release\excluded.layout.resfiles
+C:\sdks\DirectXTK-main\Bin\Windows10_2022\x64\Release\excluded.layout.resfiles.intermediate
+C:\sdks\DirectXTK-main\Bin\Windows10_2022\x64\Release\resources.resfiles
+C:\sdks\DirectXTK-main\Bin\Windows10_2022\x64\Release\resources.resfiles.intermediate
+C:\sdks\DirectXTK-main\Bin\Windows10_2022\x64\Release\pri.resfiles
+C:\sdks\DirectXTK-main\Bin\Windows10_2022\x64\Release\pri.resfiles.intermediate
+C:\sdks\DirectXTK-main\Bin\Windows10_2022\x64\Release\DirectXTK.pri
+C:\sdks\DirectXTK-main\Bin\Windows10_2022\x64\Release\qualifiers.txt
+C:\sdks\DirectXTK-main\Bin\Windows10_2022\x64\Release\qualifiers.txt.intermediate
+C:\sdks\DirectXTK-main\Bin\Windows10_2022\x64\Release\MultipleQualifiersPerDimensionFound.txt

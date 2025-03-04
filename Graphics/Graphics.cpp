@@ -44,53 +44,59 @@ void Graphics::RenderFrame()
 	this->deviceContext->IASetInputLayout(this->vertexshader.GetInputLayout());
 	this->deviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY::D3D10_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 	this->deviceContext->RSSetState(this->rasterizerState.Get());
-	deviceContext->OMGetDepthStencilState(depthStencilState.GetAddressOf(), 0);
-	this->deviceContext->OMSetBlendState(this->blendState.Get(), NULL, 0xFFFFFFFF);
+	auto* dstate = depthStencilState.Get();
+	deviceContext->OMGetDepthStencilState(&dstate, 0);
+	this->deviceContext->OMSetBlendState(NULL, NULL, 0xFFFFFFFF);
 	deviceContext->PSSetSamplers(0, 1, this->samplerState.GetAddressOf());
 	this->deviceContext->VSSetShader(vertexshader.GetShader(), NULL, 0);
 	this->deviceContext->PSSetShader(pixelshader.GetShader(), NULL, 0);
-	static float translationOffset[3] = { 0.f,0.f,0.f };
-	{ //Pink Texture
+
+
+	//static float translationOffset[3] = { 0.f,0.f,0.f };
+	//{ //Pink Texture
+	//	//Update Constant Buffer
+	//	static float translationOffset[3] = { 0, 0, 5.0f };
+	//	XMMATRIX world = XMMatrixTranslation(translationOffset[0], translationOffset[1], translationOffset[2]);
+	//	cb_vs_vertexshader.data.mat = world * camera.GetViewMatrix() * camera.GetProjectionMatrix();
+	//	cb_vs_vertexshader.data.mat = DirectX::XMMatrixTranspose(cb_vs_vertexshader.data.mat);
+	//	if (!cb_vs_vertexshader.ApplyChanges())
+	//		return;
+	//	this->deviceContext->VSSetConstantBuffers(0, 1, this->cb_vs_vertexshader.GetAddressOf());
+	//	this->cb_ps_pixelshader.data.alpha = 1.0f;
+	//	this->cb_ps_pixelshader.ApplyChanges();
+	//	this->deviceContext->PSSetConstantBuffers(0, 1, this->cb_ps_pixelshader.GetAddressOf());
+	//	//Square
+	//	this->deviceContext->PSSetShaderResources(0, 1, this->grassTexture.GetAddressOf());
+	//	this->deviceContext->IASetVertexBuffers(0, 1, vertexBuffer.GetAddressOf(), vertexBuffer.StridePtr(), &offset);
+	//	this->deviceContext->IASetIndexBuffer(indexBuffer.Get(), DXGI_FORMAT_R32_UINT, 0);
+	//	this->deviceContext->RSSetState(this->rasterizerState.Get());
+	//	this->deviceContext->DrawIndexed(indexBuffer.BufferSize(), 0, 0);
+	//}
+
+	//{ //Pink Texture
 		//Update Constant Buffer
-		static float translationOffset[3] = { 0, 0, 5.0f };
-		XMMATRIX world = XMMatrixTranslation(translationOffset[0], translationOffset[1], translationOffset[2]);
-		cb_vs_vertexshader.data.mat = world * camera.GetViewMatrix() * camera.GetProjectionMatrix();
+		
+		//XMMATRIX world = XMMatrixTranslation(translationOffset[0], translationOffset[1], translationOffset[2]);
+	/*	cb_vs_vertexshader.data.mat = world * camera.GetViewMatrix() * camera.GetProjectionMatrix();
 		cb_vs_vertexshader.data.mat = DirectX::XMMatrixTranspose(cb_vs_vertexshader.data.mat);
 		if (!cb_vs_vertexshader.ApplyChanges())
 			return;
-		this->deviceContext->VSSetConstantBuffers(0, 1, this->cb_vs_vertexshader.GetAddressOf());
-		this->cb_ps_pixelshader.data.alpha = 1.0f;
-		this->cb_ps_pixelshader.ApplyChanges();
-		this->deviceContext->PSSetConstantBuffers(0, 1, this->cb_ps_pixelshader.GetAddressOf());
+		this->deviceContext->VSSetConstantBuffers(0, 1, this->cb_vs_vertexshader.GetAddressOf());*/
+
+		this->gameObject.Draw(camera.GetViewMatrix() * camera.GetProjectionMatrix());
+
+	/*	this->cb_ps_pixelshader.data.alpha = 1.f;*/
+		/*this->cb_ps_pixelshader.ApplyChanges();
+		this->deviceContext->PSSetConstantBuffers(0, 1, this->cb_ps_pixelshader.GetAddressOf());*/
 		//Square
-		this->deviceContext->PSSetShaderResources(0, 1, this->grassTexture.GetAddressOf());
-		this->deviceContext->IASetVertexBuffers(0, 1, vertexBuffer.GetAddressOf(), vertexBuffer.StridePtr(), &offset);
-		this->deviceContext->IASetIndexBuffer(indexBuffer.Get(), DXGI_FORMAT_R32_UINT, 0);
-		this->deviceContext->RSSetState(this->rasterizerState.Get());
-		this->deviceContext->DrawIndexed(indexBuffer.BufferSize(), 0, 0);
-	}
-	static float alpha = 1.0f;
-	{ //Pink Texture
-		//Update Constant Buffer
-		static float translationOffset2[3] = { 0, 0, -1.0f };
-		XMMATRIX world = XMMatrixTranslation(translationOffset2[0], translationOffset2[1], translationOffset2[2]);
-		cb_vs_vertexshader.data.mat = world * camera.GetViewMatrix() * camera.GetProjectionMatrix();
-		cb_vs_vertexshader.data.mat = DirectX::XMMatrixTranspose(cb_vs_vertexshader.data.mat);
-		if (!cb_vs_vertexshader.ApplyChanges())
-			return;
-		this->deviceContext->VSSetConstantBuffers(0, 1, this->cb_vs_vertexshader.GetAddressOf());
-		this->cb_ps_pixelshader.data.alpha = alpha;
-		this->cb_ps_pixelshader.ApplyChanges();
-		this->deviceContext->PSSetConstantBuffers(0, 1, this->cb_ps_pixelshader.GetAddressOf());
-		//Square
-		this->deviceContext->PSSetShaderResources(0, 1, this->pavementTexture.GetAddressOf());
-		this->deviceContext->IASetVertexBuffers(0, 1, vertexBuffer.GetAddressOf(), vertexBuffer.StridePtr(), &offset);
-		this->deviceContext->IASetIndexBuffer(indexBuffer.Get(), DXGI_FORMAT_R32_UINT, 0);
+		/*this->deviceContext->PSSetShaderResources(0, 1, this->pavementTexture.GetAddressOf());
+		this->deviceContext->IASetVertexBuffers(0, 1, model.getVertexBuffer().GetAddressOf(), model.getVertexBuffer().StridePtr(), &offset);
+		this->deviceContext->IASetIndexBuffer(model.getIndexBuffer()->Get(), DXGI_FORMAT_R32_UINT, 0u);
 		this->deviceContext->RSSetState(this->rasterizerState_CullFront.Get());
-		this->deviceContext->DrawIndexed(indexBuffer.BufferSize(), 0, 0);
+		this->deviceContext->DrawIndexed(model.getIndexBuffer()->BufferSize(), 0u, 0u);
 		this->deviceContext->RSSetState(this->rasterizerState.Get());
-		this->deviceContext->DrawIndexed(indexBuffer.BufferSize(), 0, 0);
-	}
+		this->deviceContext->DrawIndexed(model.getIndexBuffer()->BufferSize(), 0u, 0u);*/
+	//}
 	static int fpsCounter = 0;
 	static std::string fpsString = "FPS: 0";
 	fpsCounter += 1;
@@ -130,8 +136,7 @@ void Graphics::RenderFrame()
 	if (ImGui::Button(view_is_local ? "Local###Select" : "Global###Deselect"))
 		view_is_local = !view_is_local;
 //	ImGui::SameLine();
-	ImGui::DragFloat3Ex(": Translation", translationOffset, 0.001f, -30.f, 999.9f);
-	ImGui::DragFloatEx("Alpha", &alpha, 0.001f, 0.0f, 1.0f);
+	//ImGui::DragFloat3Ex(": Translation", translationOffset, 0.001f, -30.f, 999.9f);
 	//popFloatSensibilityMenu(1.0f);
 	ImGui::End();
 	// assemble together draw dataa
@@ -277,55 +282,30 @@ bool Graphics::InitializeScene()
 {
 	try
 	{
-		//Textured Square
-		Vertex v[] =
-		{
-			Vertex(-0.5f,  -0.5f, -0.5f, 0.0f, 1.0f), //Bottom Left   - [0]
-			Vertex(-0.5f,   0.5f, -0.5f, 0.0f, 0.0f), //Top Left      - [1]         - FRONT
-			Vertex(0.5f,   0.5f, -0.5f, 1.0f, 0.0f), //Top Right     - [2]
-			Vertex(0.5f,  -0.5f, -0.5f, 1.0f, 1.0f), //Bottom Right   - [3]
 
-			Vertex(-0.5f,  -0.5f, 0.5f, 0.0f, 1.0f), //Bottom Left   - [4]
-			Vertex(-0.5f,   0.5f, 0.5f, 0.0f, 0.0f), //Top Left      - [5]         - BACK
-			Vertex(0.5f,   0.5f, 0.5f, 1.0f, 0.0f), //Top Right     - [6]
-			Vertex(0.5f,  -0.5f, 0.5f, 1.0f, 1.0f), //Bottom Right   - [7]
-		};
-		//Load Vertex Data
-		HRESULT hr = this->vertexBuffer.Initialize(this->device.Get(), v, ARRAYSIZE(v));
-		comfail(hr, "Failed to initialize vertexBuffer");
-		DWORD indices[] =
-		{
-			0, 1, 2,
-			0, 2, 3, // front
-			4,7,6,
-			4,6,5, // back
-			3,2,6,
-			3,6,7, // right
-			4,5,1,
-			4,1,0, // left
-			1,5,6,
-			1,6,2, // top
-			0,3,7,
-			0,7,4 // bottom
-		};
-		//Load Index Data
-		hr = this->indexBuffer.Initialize(this->device.Get(), indices, ARRAYSIZE(indices));
-		comfail(hr, "Failed to initialize indexBuffer");
-		//Load Texture
-		hr = DirectX::CreateWICTextureFromFile(this->device.Get(), L"Data\\Textures\\seamless_grass.jpg", nullptr, grassTexture.GetAddressOf());
+		HRESULT hr = DirectX::CreateWICTextureFromFile(this->device.Get(), L"Data\\Textures\\seamless_grass.jpg", nullptr, grassTexture.GetAddressOf());
 		comfail(hr, "Failed to initialize grass texture");
 		//Load Texture
 		hr = DirectX::CreateWICTextureFromFile(this->device.Get(), L"Data\\Textures\\pink.bmp", nullptr, pinkTexture.GetAddressOf());
 		comfail(hr, "Failed to initialize Pink texture");
 		//Load Texture
-		hr = DirectX::CreateWICTextureFromFile(this->device.Get(), L"Data\\Textures\\seamless_pavement.jpg", nullptr, pavementTexture.GetAddressOf());
+		hr = DirectX::CreateWICTextureFromFile(this->device.Get(), L"Data\\Objects\\nanosuit\\NanoSuit_us.dds", nullptr, pavementTexture.GetAddressOf());
 		comfail(hr, "Failed to initialize pavement texture");
 		//Initialize Constant Buffer(s)
 		hr = this->cb_vs_vertexshader.Initialize(this->device.Get(), this->deviceContext.Get());
 		comfail(hr, "Failed to initialize constant buffer for vertex shader");
 		hr = this->cb_ps_pixelshader.Initialize(this->device.Get(), this->deviceContext.Get());
 		comfail(hr, "Failed to initialize constant buffer for pixel shader");
-		camera.SetPosition(0.f, 0.f, -2.f);
+
+
+		// Initialize models
+		gameObject.Initialize("Data\\Objects\\nanosuit\\Nanosuit.obj", this->device.Get(), this->deviceContext.Get(), this->pavementTexture.Get(), cb_vs_vertexshader);
+	/*		ErrorLogger::Log(S_OK, L"Model initialization error!");
+			return false;
+		}*/
+		gameObject.SetRotation(DirectX::XM_PIDIV2, DirectX::XM_PI, 0.f);
+		gameObject.SetPosition(0.f, -1.3f, 2.f);
+		//model.SetPosition(0.f, 0.f, 5.f);
 		camera.SetProjectionValues(90.f, (float)windowWidth / (float)windowHeight, 0.1f, 1000.f);
 	}
 	catch (COMException& exception)

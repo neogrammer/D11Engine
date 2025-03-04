@@ -1,0 +1,17 @@
+C:\sdks\DirectXTK-main\Bin\Windows10_2022\x64\Debug\DirectXTK.lib
+C:\sdks\DirectXTK-main\Bin\Windows10_2022\x64\Debug\priconfig.xml
+C:\sdks\DirectXTK-main\Bin\Windows10_2022\x64\Debug\priconfig.xml.intermediate
+C:\sdks\DirectXTK-main\Bin\Windows10_2022\x64\Debug\unfiltered.layout.resfiles
+C:\sdks\DirectXTK-main\Bin\Windows10_2022\x64\Debug\unfiltered.layout.resfiles.intermediate
+C:\sdks\DirectXTK-main\Bin\Windows10_2022\x64\Debug\filtered.layout.resfiles
+C:\sdks\DirectXTK-main\Bin\Windows10_2022\x64\Debug\filtered.layout.resfiles.intermediate
+C:\sdks\DirectXTK-main\Bin\Windows10_2022\x64\Debug\excluded.layout.resfiles
+C:\sdks\DirectXTK-main\Bin\Windows10_2022\x64\Debug\excluded.layout.resfiles.intermediate
+C:\sdks\DirectXTK-main\Bin\Windows10_2022\x64\Debug\resources.resfiles
+C:\sdks\DirectXTK-main\Bin\Windows10_2022\x64\Debug\resources.resfiles.intermediate
+C:\sdks\DirectXTK-main\Bin\Windows10_2022\x64\Debug\pri.resfiles
+C:\sdks\DirectXTK-main\Bin\Windows10_2022\x64\Debug\pri.resfiles.intermediate
+C:\sdks\DirectXTK-main\Bin\Windows10_2022\x64\Debug\DirectXTK.pri
+C:\sdks\DirectXTK-main\Bin\Windows10_2022\x64\Debug\qualifiers.txt
+C:\sdks\DirectXTK-main\Bin\Windows10_2022\x64\Debug\qualifiers.txt.intermediate
+C:\sdks\DirectXTK-main\Bin\Windows10_2022\x64\Debug\MultipleQualifiersPerDimensionFound.txt

@@ -1,76 +1,83 @@
-#ifndef VERTEX_BUFFER_H__
-#define VERTEX_BUFFER_H__
-
+#ifndef VertexBuffer_h__
+#define VertexBuffer_h__
 #include <d3d11.h>
 #include <wrl/client.h>
+#include <memory>
 
 template<class T>
 class VertexBuffer
 {
 private:
-	VertexBuffer(const VertexBuffer<T>& rhs);
-
-private:
 	Microsoft::WRL::ComPtr<ID3D11Buffer> buffer;
-	std::unique_ptr<UINT> stride;
-	UINT bufferSize = 0u;
+	UINT stride = sizeof(T);
+	UINT vertexCount = 0;
 
 public:
 	VertexBuffer() {}
 
-	ID3D11Buffer* Get() const 
+	VertexBuffer(const VertexBuffer<T>& rhs)
+	{
+		this->buffer = rhs.buffer;
+		this->vertexCount = rhs.vertexCount;
+		this->stride = rhs.stride;
+	}
+
+	VertexBuffer<T>& operator=(const VertexBuffer<T>& a)
+	{
+		this->buffer = a.buffer;
+		this->vertexCount = a.vertexCount;
+		this->stride = a.stride;
+		return *this;
+	}
+
+	ID3D11Buffer* Get()const
 	{
 		return buffer.Get();
 	}
 
-	ID3D11Buffer* const* GetAddressOf() const
+	ID3D11Buffer* const* GetAddressOf()const
 	{
 		return buffer.GetAddressOf();
-
 	}
 
-
-	UINT BufferSize() const
+	UINT VertexCount() const
 	{
-		return this->bufferSize;
+		return this->vertexCount;
 	}
 
 	const UINT Stride() const
 	{
-		return *this->stride.get();
+		return this->stride;
 	}
+
 	const UINT* StridePtr() const
 	{
-		return this->stride.get();
+		return &this->stride;
 	}
 
-	HRESULT Initialize(ID3D11Device* device, T* data, UINT numVertices)
+	HRESULT Initialize(ID3D11Device* device, T* data, UINT vertexCount)
 	{
 		if (buffer.Get() != nullptr)
-		{
 			buffer.Reset();
-		}
-		this->bufferSize = numVertices;
-		if (stride.get() == nullptr)
-			this->stride = std::make_unique<UINT>((UINT)sizeof(T));
 
-		D3D11_BUFFER_DESC vertexBufferDesc = {};
+		this->vertexCount = vertexCount;
+
+		D3D11_BUFFER_DESC vertexBufferDesc;
+		ZeroMemory(&vertexBufferDesc, sizeof(vertexBufferDesc));
 
 		vertexBufferDesc.Usage = D3D11_USAGE_DEFAULT;
-		vertexBufferDesc.ByteWidth = sizeof(T) * numVertices;
+		vertexBufferDesc.ByteWidth = stride * vertexCount;
 		vertexBufferDesc.BindFlags = D3D11_BIND_VERTEX_BUFFER;
 		vertexBufferDesc.CPUAccessFlags = 0;
 		vertexBufferDesc.MiscFlags = 0;
 
-		D3D11_SUBRESOURCE_DATA vertexBufferData = {};
+		D3D11_SUBRESOURCE_DATA vertexBufferData;
+		ZeroMemory(&vertexBufferData, sizeof(vertexBufferData));
 		vertexBufferData.pSysMem = data;
 
-		HRESULT hr = device->CreateBuffer(&vertexBufferDesc, &vertexBufferData, buffer.GetAddressOf());
+		HRESULT hr = device->CreateBuffer(&vertexBufferDesc, &vertexBufferData, this->buffer.GetAddressOf());
 		return hr;
 	}
-
-
-
 };
 
-#endif
+#endif // VertexBuffer_h__

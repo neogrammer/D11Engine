@@ -2,21 +2,21 @@
 <Project>
   <ProjectOutputs>
     <ProjectOutput>
-      <FullPath>C:\Users\AUStudent\Desktop\ProgrammingProjects\NewD11Engine\D11Engine\x64\Release\D11Engine.exe</FullPath>
+      <FullPath>C:\Users\jlhar\OneDrive\Desktop\VS_PJX\VS2022\D11Engine\x64\Release\D11Engine.exe</FullPath>
     </ProjectOutput>
   </ProjectOutputs>
   <ContentFiles>
     <ContentFile>
-      <FullPath>C:\Users\AUStudent\Desktop\ProgrammingProjects\NewD11Engine\D11Engine\Shaders\Bytecode\pixelshader.cso</FullPath>
+      <FullPath>C:\Users\jlhar\OneDrive\Desktop\VS_PJX\VS2022\D11Engine\Shaders\Bytecode\pixelshader.cso</FullPath>
     </ContentFile>
     <ContentFile>
-      <FullPath>C:\Users\AUStudent\Desktop\ProgrammingProjects\NewD11Engine\D11Engine\Shaders\Bytecode\vertexshader.cso</FullPath>
+      <FullPath>C:\Users\jlhar\OneDrive\Desktop\VS_PJX\VS2022\D11Engine\Shaders\Bytecode\vertexshader.cso</FullPath>
     </ContentFile>
     <ContentFile>
-      <FullPath>C:\Users\AUStudent\Desktop\ProgrammingProjects\NewD11Engine\D11Engine\Libs.7z</FullPath>
+      <FullPath>C:\Users\jlhar\OneDrive\Desktop\VS_PJX\VS2022\D11Engine\Libs.7z</FullPath>
     </ContentFile>
     <ContentFile>
-      <FullPath>C:\Users\AUStudent\Desktop\ProgrammingProjects\NewD11Engine\D11Engine\Libs.zip</FullPath>
+      <FullPath>C:\Users\jlhar\OneDrive\Desktop\VS_PJX\VS2022\D11Engine\Libs.zip</FullPath>
     </ContentFile>
   </ContentFiles>
   <SatelliteDlls />
